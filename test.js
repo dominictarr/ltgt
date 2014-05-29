@@ -177,18 +177,41 @@ var ranges = [
 ]
 
 
+var strings = ['00', '01']
+var sranges = [
+  {range:
+    {start: '00'},
+    selection:
+      ['00', '01']
+  }
+]
 function compare (a, b) {
   return a - b
 }
 
-ranges.forEach(function (e) {
+make(elements, ranges)
 
-  tape(JSON.stringify(e.range) + ' => '+ JSON.stringify(e.selection),
-    function (t) {
-      var actual = elements.filter(ltgt.filter(e.range, compare))
-      if(e.range.reverse)
-        actual.reverse()
-      t.deepEqual(actual, e.selection)
-      t.end()
-    })
-})
+make(strings, sranges)
+make(elements.map(String), ranges.map(function (e) {
+  var r = {}
+  for(var k in e.range)
+    if('number' === typeof e.range[k])
+      r[k] = e.range.toString()
+  return {range: e.range, selection: e.selection.map(String)}
+}))
+
+function make (elements, ranges) {
+
+  ranges.forEach(function (e) {
+
+    tape(JSON.stringify(e.range) + ' => '+ JSON.stringify(e.selection),
+      function (t) {
+        var actual = elements.filter(ltgt.filter(e.range))
+        if(e.range.reverse)
+          actual.reverse()
+        t.deepEqual(actual, e.selection)
+        t.end()
+      })
+  })
+}
+
