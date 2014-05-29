@@ -17,8 +17,13 @@ function has(obj, key) {
   return Object.hasOwnProperty.call(obj, key)
 }
 
+// to be compatible with the current abstract-leveldown tests
+// nullish or empty strings.
+// I could use !!val but I want to permit numbers and booleans,
+// if possible.
+
 function isDef (val) {
-  return 'undefined' !== typeof val
+  return val != null && val !== ''
 }
 
 var lowerBound = exports.lowerBound = function (range) {
