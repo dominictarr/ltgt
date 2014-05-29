@@ -10,7 +10,7 @@ exports.compare = function (a, b) {
     return a.length - b.length
   }
 
-  return a < b ? 1 : a > b ? -1 : 0
+  return a < b ? -1 : a > b ? 1 : 0
 }
 
 function has(obj, key) {
