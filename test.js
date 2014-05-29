@@ -80,6 +80,23 @@ var ranges = [
       [5, 4, 3, 2, 1]
   },
 
+  //nullish and empty strings signify are streated like null!
+  { range:
+      {end: null, reverse: true},
+    selection:
+      [5, 4, 3, 2, 1]
+  },
+  { range:
+      {end: undefined, reverse: true},
+    selection:
+      [5, 4, 3, 2, 1]
+  },
+  { range:
+      {end: '', reverse: true},
+    selection:
+      [5, 4, 3, 2, 1]
+  },
+
   //lt/gt/lte/gte
 
   { range:
@@ -177,13 +194,19 @@ var ranges = [
 ]
 
 
-var strings = ['00', '01']
+var strings = ['00', '01', '02']
 var sranges = [
   {range:
     {start: '00'},
     selection:
-      ['00', '01']
-  }
+      ['00', '01', '02']
+  },
+  {range:
+    {start: '03', reverse: true},
+    selection:
+      ['02', '01', '00']
+  },
+
 ]
 function compare (a, b) {
   return a - b
@@ -215,3 +238,11 @@ function make (elements, ranges) {
   })
 }
 
+
+tape('upperBound', function (t) {
+  t.equal('b', ltgt.upperBound({start: 'b', reverse: true}))
+  t.equal('b', ltgt.upperBound({end: 'b', reverse: false}))
+  t.equal(undefined, ltgt.lowerBound({start: 'b', reverse: true}))
+  t.equal(undefined, ltgt.lowerBound({end: 'b', reverse: false}))
+  t.end()
+})
