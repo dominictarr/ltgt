@@ -2,7 +2,11 @@
 
 implement correct ranges for level-*
 
+[![build status](https://secure.travis-ci.org/dominictarr/ltgt.png)](http://travis-ci.org/dominictarr/ltgt)
+[![testling badge](https://ci.testling.com/dominictarr/ltgt.png)](https://ci.testling.com/dominictarr/ltgt)
+
 # example
+
 
 ``` js
 var ltgt = require('ltgt')
