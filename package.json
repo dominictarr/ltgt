@@ -17,7 +17,7 @@
   "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
   "license": "MIT",
   "testling": {
-    "files": "test/*.js",
+    "files": "test.js",
     "browsers": [
       "ie/8..latest",
       "firefox/17..latest",
