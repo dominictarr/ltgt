@@ -93,20 +93,25 @@ var upperBound = exports.upperBound = function (range) {
 
 function id (e) { return e }
 
-exports.toLtgt = function (range, _range, map) {
+exports.toLtgt = function (range, _range, map, lower, upper) {
   _range = _range || {}
   map = map || id
+  var defaults = arguments.length > 3
   var lb = exports.lowerBoundKey(range)
   var ub = exports.upperBoundKey(range)
   if(lb) {
     if(lb === 'gt') _range.gt = map(range.gt)
     else            _range.gte = map(range[lb])
   }
+  else if(defaults)
+    _range.gte = lower
 
   if(ub) {
     if(ub === 'lt') _range.lt = map(range.lt)
     else            _range.lte = map(range[ub])
   }
+  else if(defaults)
+    _range.lte = upper
 
   _range.reverse = !!range.reverse
 
