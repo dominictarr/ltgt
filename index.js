@@ -104,16 +104,17 @@ exports.toLtgt = function (range, _range, map, lower, upper) {
     else            _range.gte = map(range[lb])
   }
   else if(defaults)
-    _range.gte = lower
+    _range.gte = map(lower)
 
   if(ub) {
     if(ub === 'lt') _range.lt = map(range.lt)
     else            _range.lte = map(range[ub])
   }
   else if(defaults)
-    _range.lte = upper
+    _range.lte = map(upper)
 
-  _range.reverse = !!range.reverse
+  if(range.reverse != null)
+    _range.reverse = !!range.reverse
 
   return _range
 }
