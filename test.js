@@ -256,3 +256,90 @@ tape('upperBound', function (t) {
   t.equal(undefined, ltgt.lowerBound({end: 'b', reverse: false}))
   t.end()
 })
+
+tape('toLtgt', function (t) {
+
+  function map (key) {
+    return 'foo!' + key
+  }
+
+  //start, end
+
+  t.deepEqual(
+    {gte: 'foo!a', lte: 'foo!b'},
+    ltgt.toLtgt({start: 'a', end:'b'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!a', lte: 'foo!~'},
+    ltgt.toLtgt({start: 'a'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!!', lte: 'foo!b'},
+    ltgt.toLtgt({end: 'b'}, null, map, '!', '~')
+  )
+
+  t.deepEqual(
+    {gte: 'foo!a', lte: 'foo!b', reverse: true},
+    ltgt.toLtgt({start: 'b', end: 'a', reverse: true}, null, map, '!', '~')
+  )
+
+  // min, max
+
+  t.deepEqual(
+    {gte: 'foo!a', lte: 'foo!b'},
+    ltgt.toLtgt({min: 'a', max:'b'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!a', lte: 'foo!~'},
+    ltgt.toLtgt({min: 'a'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!!', lte: 'foo!b'},
+    ltgt.toLtgt({max: 'b'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!!', lte: 'foo!~'},
+    ltgt.toLtgt({}, null, map, '!', '~')
+  )
+
+  // lt, gt
+
+  t.deepEqual(
+    {gt: 'foo!a', lt: 'foo!b'},
+    ltgt.toLtgt({gt: 'a', lt:'b'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gt: 'foo!a', lte: 'foo!~'},
+    ltgt.toLtgt({gt: 'a'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!!', lt: 'foo!b'},
+    ltgt.toLtgt({lt: 'b'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!!', lte: 'foo!~'},
+    ltgt.toLtgt({}, null, map, '!', '~')
+  )
+
+  // lt, gt
+
+  t.deepEqual(
+    {gte: 'foo!a', lte: 'foo!b'},
+    ltgt.toLtgt({gte: 'a', lte:'b'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!a', lte: 'foo!~'},
+    ltgt.toLtgt({gte: 'a'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!!', lte: 'foo!b'},
+    ltgt.toLtgt({lte: 'b'}, null, map, '!', '~')
+  )
+  t.deepEqual(
+    {gte: 'foo!!', lte: 'foo!~'},
+    ltgt.toLtgt({}, null, map, '!', '~')
+  )
+
+
+  t.end()
+})
