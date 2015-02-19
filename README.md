@@ -110,14 +110,16 @@ return true if upper bound is exclusive.
 
 return true if lower bound is exclusive.
 
-## ltgt.toLtgt(range, _range, map)
+## ltgt.toLtgt(range, _range, map, lowerBound, upperBound)
 
 convert a range to a new ltgt range. `_range`
 is the object to return - if you want to mutate `range`
 call `ltgt.toLtgt(range, range, map)`
 
-`map` gets called on each key in the range -
+`map` gets called on each key in the range, and wether it's an upper or lower bound -
 so can be used as an encode function.
+
+`map(value, isUpperBound)` if `isUpperBound` is false, this is the lower bound.
 
 ## License
 
