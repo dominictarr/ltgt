@@ -100,18 +100,18 @@ exports.toLtgt = function (range, _range, map, lower, upper) {
   var lb = exports.lowerBoundKey(range)
   var ub = exports.upperBoundKey(range)
   if(lb) {
-    if(lb === 'gt') _range.gt = map(range.gt)
-    else            _range.gte = map(range[lb])
+    if(lb === 'gt') _range.gt = map(range.gt, false)
+    else            _range.gte = map(range[lb], false)
   }
   else if(defaults)
-    _range.gte = map(lower)
+    _range.gte = map(lower, false)
 
   if(ub) {
-    if(ub === 'lt') _range.lt = map(range.lt)
-    else            _range.lte = map(range[ub])
+    if(ub === 'lt') _range.lt = map(range.lt, true)
+    else            _range.lte = map(range[ub], true)
   }
   else if(defaults)
-    _range.lte = map(upper)
+    _range.lte = map(upper, true)
 
   if(range.reverse != null)
     _range.reverse = !!range.reverse
