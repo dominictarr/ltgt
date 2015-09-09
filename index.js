@@ -116,6 +116,14 @@ exports.toLtgt = function (range, _range, map, lower, upper) {
   if(range.reverse != null)
     _range.reverse = !!range.reverse
 
+  //if range was used mutably
+  //(in level-sublevel it's part of an options object
+  //that has more properties on it.)
+  if(has(_range, 'max'))   delete _range.max
+  if(has(_range, 'min'))   delete _range.min
+  if(has(_range, 'start')) delete _range.start
+  if(has(_range, 'end'))   delete _range.end
+
   return _range
 }
 
