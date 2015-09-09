@@ -1,6 +1,13 @@
 var tape = require('tape')
 var ltgt = require('./')
 
+function clone (o) {
+  var O = {}
+  for(var k in o)
+    O[k] = o[k]
+  return O
+}
+
 var elements = [
   1, 2, 3, 4, 5
 ]
@@ -257,89 +264,56 @@ tape('upperBound', function (t) {
   t.end()
 })
 
-tape('toLtgt', function (t) {
 
-  function map (key) {
-    return 'foo!' + key
+
+function createLtgtTests(mutate) {
+  return function (t) {
+    function map (key) {
+      return 'foo!' + key
+    }
+
+    function T (expected, input) {
+      input = clone(input)
+      t.deepEqual(
+        expected,
+        ltgt.toLtgt(input, mutate ? input : null, map, '!', '~')
+      )
+    }
+
+    //start, end
+
+    T({gte: 'foo!a', lte: 'foo!b'}, {start: 'a', end:'b'})
+    T({gte: 'foo!a', lte: 'foo!~'}, {start: 'a'})
+    T({gte: 'foo!!', lte: 'foo!b'}, {end: 'b'})
+
+    T({gte: 'foo!a', lte: 'foo!b', reverse: true},
+      {start: 'b', end: 'a', reverse: true})
+
+    // min, max
+
+    T({gte: 'foo!a', lte: 'foo!b'}, {min: 'a', max:'b'})
+    T({gte: 'foo!a', lte: 'foo!~'}, {min: 'a'})
+    T({gte: 'foo!!', lte: 'foo!b'}, {max: 'b'})
+    T({gte: 'foo!!', lte: 'foo!~'}, {})
+
+    // lt, gt
+
+    T({gt: 'foo!a', lt: 'foo!b'}, {gt: 'a', lt:'b'})
+    T({gt: 'foo!a', lte: 'foo!~'}, {gt: 'a'})
+    T({gte: 'foo!!', lt: 'foo!b'}, {lt: 'b'})
+    T({gte: 'foo!!', lte: 'foo!~'}, {})
+
+    // lt, gt
+
+    T({gte: 'foo!a', lte: 'foo!b'}, {gte: 'a', lte:'b'})
+    T({gte: 'foo!a', lte: 'foo!~'}, {gte: 'a'})
+    T({gte: 'foo!!', lte: 'foo!b'}, {lte: 'b'})
+    T({gte: 'foo!!', lte: 'foo!~'}, {})
+
+    t.end()
   }
+}
 
-  //start, end
+tape('toLtgt - immutable', createLtgtTests(false))
+tape('toLtgt - mutable', createLtgtTests(true))
 
-  t.deepEqual(
-    {gte: 'foo!a', lte: 'foo!b'},
-    ltgt.toLtgt({start: 'a', end:'b'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!a', lte: 'foo!~'},
-    ltgt.toLtgt({start: 'a'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!!', lte: 'foo!b'},
-    ltgt.toLtgt({end: 'b'}, null, map, '!', '~')
-  )
-
-  t.deepEqual(
-    {gte: 'foo!a', lte: 'foo!b', reverse: true},
-    ltgt.toLtgt({start: 'b', end: 'a', reverse: true}, null, map, '!', '~')
-  )
-
-  // min, max
-
-  t.deepEqual(
-    {gte: 'foo!a', lte: 'foo!b'},
-    ltgt.toLtgt({min: 'a', max:'b'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!a', lte: 'foo!~'},
-    ltgt.toLtgt({min: 'a'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!!', lte: 'foo!b'},
-    ltgt.toLtgt({max: 'b'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!!', lte: 'foo!~'},
-    ltgt.toLtgt({}, null, map, '!', '~')
-  )
-
-  // lt, gt
-
-  t.deepEqual(
-    {gt: 'foo!a', lt: 'foo!b'},
-    ltgt.toLtgt({gt: 'a', lt:'b'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gt: 'foo!a', lte: 'foo!~'},
-    ltgt.toLtgt({gt: 'a'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!!', lt: 'foo!b'},
-    ltgt.toLtgt({lt: 'b'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!!', lte: 'foo!~'},
-    ltgt.toLtgt({}, null, map, '!', '~')
-  )
-
-  // lt, gt
-
-  t.deepEqual(
-    {gte: 'foo!a', lte: 'foo!b'},
-    ltgt.toLtgt({gte: 'a', lte:'b'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!a', lte: 'foo!~'},
-    ltgt.toLtgt({gte: 'a'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!!', lte: 'foo!b'},
-    ltgt.toLtgt({lte: 'b'}, null, map, '!', '~')
-  )
-  t.deepEqual(
-    {gte: 'foo!!', lte: 'foo!~'},
-    ltgt.toLtgt({}, null, map, '!', '~')
-  )
-
-
-  t.end()
-})
