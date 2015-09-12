@@ -47,14 +47,6 @@ var lowerBoundKey = exports.lowerBoundKey = function (range) {
 var lowerBound = exports.lowerBound = function (range) {
   var k = lowerBoundKey(range)
   return k && range[k]
-  return (
-      has(range, 'gt')                      ? range.gt
-    : has(range, 'gte')                     ? range.gte
-    : has(range, 'min')                     ? range.min
-    : has(range, 'start') && !range.reverse ? range.start
-    : has(range, 'end')   && range.reverse  ? range.end
-    :                                         undefined
-  )
 }
 
 exports.lowerBoundInclusive = function (range) {
