@@ -12,6 +12,7 @@
     "tape": "~2.13.1"
   },
   "scripts": {
+    "prepublish": "npm ls && node test.js",
     "test": "node test.js"
   },
   "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
